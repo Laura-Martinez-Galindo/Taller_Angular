@@ -1,33 +1,53 @@
-<div class="row mt-4" id="main-row">
-            <div class="col-md-12" id="list-col">
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Channel</th>
-                            <th scope="col">Seasons</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (s of series; track s){
-                            <tr>
-                                <td>
-                                    <dd>{{s.id}}</dd>
-                                </td>
-                                <td>
-                                    <dd>{{s.nombre}}</dd>
-                                </td>
-                                <td>
-                                    <dd>{{s.canal}}</dd>
-                                </td>
-                                <td>
-                                    <dd>{{s.temporadas}}</dd>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <p id="promedio-temporadas" class="text-center font-weight-bold mt-2"></p>
-            </div>
-        </div>
+<div class="row mt-4">
+
+  <!-- Tabla de series -->
+  <div [class.col-md-6]="serieSeleccionada" [class.col-md-12]="!serieSeleccionada" id="list-col">
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Channel</th>
+          <th>Seasons</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Recorremos series usando *ngFor y trackById -->
+        <tr *ngFor="let s of series; trackBy: trackById">
+          <td>{{ s.id }}</td>
+          <td>
+            <span class="serie-link" (click)="mostrarSerieCard(s)">
+              {{ s.nombre }}
+            </span>
+          </td>
+          <td>{{ s.canal }}</td>
+          <td>{{ s.temporadas }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Promedio de temporadas -->
+    <p class="text-center font-weight-bold mt-2">
+      <strong>Seasons average:</strong> {{ promedioTemporadas | number:'1.0-0' }}
+    </p>
+  </div>
+
+  <!-- Card lateral de la serie seleccionada -->
+  <div *ngIf="serieSeleccionada" class="col-md-6" id="card-col">
+    <div class="card serie-card">
+      <img
+        class="card-img-top"
+        [src]="serieSeleccionada?.imagen"
+        [alt]="serieSeleccionada?.nombre"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ serieSeleccionada?.nombre }}</h5>
+        <p class="card-text">{{ serieSeleccionada?.descripcion }}</p>
+        <a [href]="serieSeleccionada?.url" class="btn btn-primary" target="_blank">
+          Ver más
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
